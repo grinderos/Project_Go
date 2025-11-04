@@ -409,7 +409,10 @@ func main() {
 	////----------------------------------------------------
 	// printTable(5)
 	////----------------------------------------------------
-	printDiamond(5)
+	// printDiamond(5)
+	////----------------------------------------------------
+	isPalindrome([]int{4, 2, 3, 3, 9, 9, 3, 3, 2, 4})
+
 }
 
 // func UserProfileToString(name string, age int) (string, error) {
@@ -568,3 +571,18 @@ func printDiamond(n int) {
 //   #   #
 //    # #
 //     #
+
+func isPalindrome(nums []int) {
+	fmt.Println(nums)
+	left := 0
+	right := len(nums) - 1
+	for left < right {
+		if nums[left] != nums[right] {
+			fmt.Println("Не палиндром!")
+			return
+		}
+		left++
+		right--
+	}
+	fmt.Println("Это палиндром!")
+}
