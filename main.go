@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strings"
 )
 
 const (
@@ -404,7 +405,11 @@ func main() {
 	// 	fmt.Printf("Буквенный балл: %s\n", leter)
 	// }
 	////----------------------------------------------------
-	PrintReplaced("Кукушка")
+	// PrintReplaced("Кукушка")
+	////----------------------------------------------------
+	// printTable(5)
+	////----------------------------------------------------
+	printDiamond(5)
 }
 
 // func UserProfileToString(name string, age int) (string, error) {
@@ -487,31 +492,79 @@ func main() {
 // 	}
 // 	return num%10 + sumOfDigits(num/10)
 // }
+///----------------------------------------------------
+// func letterBall(num int) (leter string, err error) {
 
-func letterBall(num int) (leter string, err error) {
+// 	switch {
+// 	case num >= 90 && num <= 100:
+// 		return "A", nil
+// 	case num >= 80 && num < 90:
+// 		return "B", nil
+// 	case num >= 70 && num < 80:
+// 		return "C", nil
+// 	case num >= 60 && num < 70:
+// 		return "D", nil
+// 	case num >= 0 && num < 60:
+// 		return "F", nil
+// 	default:
+// 		return "", fmt.Errorf("Числовой балл %d вне диапазона 0-100.", num)
+// 	}
+// }
 
-	switch {
-	case num >= 90 && num <= 100:
-		return "A", nil
-	case num >= 80 && num < 90:
-		return "B", nil
-	case num >= 70 && num < 80:
-		return "C", nil
-	case num >= 60 && num < 70:
-		return "D", nil
-	case num >= 0 && num < 60:
-		return "F", nil
-	default:
-		return "", fmt.Errorf("Числовой балл %d вне диапазона 0-100.", num)
-	}
-}
+// func PrintReplaced(str string) {
+// 	runes := []rune(str)
+// 	for i, char := range runes {
+// 		if char == 'у' {
+// 			runes[i] = 'а'
+// 		}
+// 	}
+// 	fmt.Println(string(runes))
+// }
 
-func PrintReplaced(str string) {
-	runes := []rune(str)
-	for i, char := range runes {
-		if char == 'у' {
-			runes[i] = 'а'
+// func printTable(num int) {
+// 	var sb strings.Builder
+// 	for i := 1; i <= num; i++ {
+// 		for j := 1; j <= num; j++ {
+// 			sb.WriteString(fmt.Sprintf("%d x %d = %d", i, j, i*j))
+// 			if j != num {
+// 				sb.WriteString("\t")
+// 			}
+// 		}
+// 		sb.WriteString("\n")
+// 	}
+// 	fmt.Print(sb.String())
+// }
+
+func printDiamond(n int) {
+	fmt.Println("Мой бриллиант:")
+	var sb strings.Builder
+	lines := make([]string, n)
+	for i := n; i > 0; i-- {
+		endPosition := n + n - i
+		for j := 1; j <= endPosition; j++ {
+			if j == i || j == endPosition {
+				sb.WriteString("#")
+			} else {
+				sb.WriteString(" ")
+			}
 		}
+		lines[n-i] = sb.String()
+		sb.Reset()
 	}
-	fmt.Println(string(runes))
+	for _, line := range lines {
+		fmt.Println(line)
+	}
+	for i := len(lines) - 2; i >= 0; i-- {
+		fmt.Println(lines[i])
+	}
 }
+
+//     #
+//    # #
+//   #   #
+//  #     #
+// #       #
+//  #     #
+//   #   #
+//    # #
+//     #
