@@ -411,7 +411,12 @@ func main() {
 	////----------------------------------------------------
 	// printDiamond(5)
 	////----------------------------------------------------
-	isPalindrome([]int{4, 2, 3, 3, 9, 9, 3, 3, 2, 4})
+	// isPalindrome([]int{4, 2, 3, 3, 9, 9, 3, 3, 2, 4})
+	////----------------------------------------------------
+	// CountVowelsInArray([]string{"Привет", "Мир", "ГорурерырарОрЭрярИрЮ", "Язык"})
+	////----------------------------------------------------
+	nums := [10]int{-1, 12, -4, 6, -8, 10, -12, 14, -16, 8}
+	fmt.Println(SumNeighbors(nums))
 
 }
 
@@ -585,4 +590,35 @@ func isPalindrome(nums []int) {
 		right--
 	}
 	fmt.Println("Это палиндром!")
+}
+
+func CountVowelsInArray(words []string) {
+	var sb strings.Builder
+	for _, word := range words {
+		count := 0
+		for _, char := range word {
+			letter := strings.ToLower(string(char))
+			switch letter {
+			case "а", "е", "и", "о", "у", "ы", "э", "ю", "я":
+				count++
+			}
+		}
+		sb.WriteString(fmt.Sprint(count, " "))
+	}
+	fmt.Println(sb.String())
+	sb.Reset()
+}
+
+func SumNeighbors(nums [10]int) [10]int {
+	var result [10]int
+	for i := 0; i < len(nums); i++ {
+		if i == 0 {
+			result[i] = nums[i+1]
+		} else if i == len(nums)-1 {
+			result[i] = nums[i-1]
+		} else {
+			result[i] = nums[i-1] + nums[i+1]
+		}
+	}
+	return result
 }
