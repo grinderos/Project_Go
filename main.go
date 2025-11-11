@@ -448,8 +448,23 @@ func main() {
 	// fmt.Println(PlayWithSlice([]int{-5, -10, 20, 15}))
 	// fmt.Println(PlayWithSlice([]int{2, 4, 6, 1, 3}))
 	////----------------------------------------------------
-	fmt.Println(DeletingFromSlice([]int{1, 2, 3, 4, 5, 11, 12}))
-	fmt.Println(DeletingFromSlice([]int{}))
+	// fmt.Println(DeletingFromSlice([]int{1, 2, 3, 4, 5, 11, 12}))
+	// fmt.Println(DeletingFromSlice([]int{}))
+	////----------------------------------------------------
+
+	input := [][]int{
+		{3, 1, 4, 1},
+		{2, 2, 2},
+		{5, 0, 6, 3, -8, 1},
+		{4, 6, 8, 2},
+	}
+
+	magicSort(input)
+	for _, inner := range input {
+		fmt.Println(inner)
+	}
+	////----------------------------------------------------
+
 }
 
 // func UserProfileToString(name string, age int) (string, error) {
@@ -826,4 +841,52 @@ func DeletingFromSlice(input []int) []int {
 	input = slices.Clip(input)
 
 	return input
+}
+
+func magicSort(arr [][]int) {
+	for i := range arr {
+		slices.SortFunc(arr[i], func(a, b int) int {
+			if a == 0 && b != 0 {
+				return -1
+			}
+			if b == 0 && a != 0 {
+				return 1
+			}
+
+			aEven, bEven := a%2 == 0, b%2 == 0
+			if aEven && !bEven {
+				return -1
+			}
+			if !aEven && bEven {
+				return 1
+			}
+
+			if a > b {
+				return -1
+			}
+			if a < b {
+				return 1
+			}
+			return 0
+		})
+	}
+
+	slices.SortStableFunc(arr, func(a, b []int) int {
+		sumA, sumB := 0, 0
+
+		for _, num := range a {
+			sumA += num
+		}
+		for _, num := range b {
+			sumB += num
+		}
+
+		if sumA < sumB {
+			return -1
+		}
+		if sumA > sumB {
+			return 1
+		}
+		return 0
+	})
 }
