@@ -1,7 +1,10 @@
 package main
 
 import (
+	"errors"
 	"fmt"
+	"slices"
+	"strconv"
 	"strings"
 )
 
@@ -415,9 +418,38 @@ func main() {
 	////----------------------------------------------------
 	// CountVowelsInArray([]string{"Привет", "Мир", "ГорурерырарОрЭрярИрЮ", "Язык"})
 	////----------------------------------------------------
-	nums := [10]int{-1, 12, -4, 6, -8, 10, -12, 14, -16, 8}
-	fmt.Println(SumNeighbors(nums))
+	// nums := [10]int{-1, 12, -4, 6, -8, 10, -12, 14, -16, 8}
+	// fmt.Println(SumNeighbors(nums))
+	////----------------------------------------------------
+	// printMagic([]int{1, 2, 3, 4})
+	// printMagic([]int{5, 6, 7, 1, 1})
+	// printMagic([]int{2, 0, -3})
+	////----------------------------------------------------
+	// fmt.Println(SumSlices([]int{1, 2, 3}, []int{4, 5, 6, 7, 8}))
+	////----------------------------------------------------
+	// var arr []int = filterEven(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+	// fmt.Println(arr)
+	////----------------------------------------------------
+	// fmt.Println(Max([]int{5, 7, 2, 8}))
+	// fmt.Println(Max([]int{-1, -5, -3}))
+	////----------------------------------------------------
 
+	// nums := [][]int{
+	// 	{1, 2, 3},
+	// 	{},
+	// 	{7, 8, 9, 22, 0},
+	// 	{0, 11},
+	// }
+	// fmt.Println(replaceEvenOnEvenIndices(nums))
+	////----------------------------------------------------
+	// fmt.Println(intersectSlices([]int{-3, -2, -1, 0, 1, 2, 3}, []int{-2, 0, 2, 4, 6}))
+	////----------------------------------------------------
+	// fmt.Println(PlayWithSlice([]int{50, 60}))
+	// fmt.Println(PlayWithSlice([]int{-5, -10, 20, 15}))
+	// fmt.Println(PlayWithSlice([]int{2, 4, 6, 1, 3}))
+	////----------------------------------------------------
+	fmt.Println(DeletingFromSlice([]int{1, 2, 3, 4, 5, 11, 12}))
+	fmt.Println(DeletingFromSlice([]int{}))
 }
 
 // func UserProfileToString(name string, age int) (string, error) {
@@ -621,4 +653,177 @@ func SumNeighbors(nums [10]int) [10]int {
 		}
 	}
 	return result
+}
+
+func printMagic(nums []int) {
+	if len(nums) == 0 {
+		fmt.Println("[]")
+		return
+	}
+
+	numLength := len(nums)
+	arr := make([]int, numLength)
+	for i := range arr {
+		for j := 0; j < numLength; j++ {
+			if i == 0 && j == 0 {
+				arr[i] = 1
+				continue
+			}
+
+			if j == i {
+				continue
+			}
+			if j == 0 && arr[i] == 0 {
+				arr[i] = nums[j]
+				continue
+			}
+			arr[i] *= nums[j]
+		}
+	}
+	var sb strings.Builder
+	sb.WriteString("[")
+	for i, v := range arr {
+		sb.WriteString(strconv.Itoa(v))
+		if i != numLength-1 {
+			sb.WriteString(", ")
+		}
+	}
+	fmt.Println(sb.String() + "]")
+}
+
+func SumSlices(slice1 []int, slice2 []int) []int {
+	var minLength int
+	if len(slice2) < len(slice1) {
+		minLength = len(slice2)
+	} else {
+		minLength = len(slice1)
+	}
+	var result []int = make([]int, 0, minLength)
+	for i := 0; i < minLength; i++ {
+		result = append(result, slice1[i]+slice2[i])
+	}
+	return result
+}
+
+func filterEven(nums ...int) []int {
+	var evens []int
+	for _, num := range nums {
+		if num%2 == 0 {
+			evens = append(evens, num)
+		}
+	}
+	return evens
+}
+
+func Max(nums []int) (int, error) {
+	if nums == nil || len(nums) == 0 {
+		return 0, errors.New("slice is nil or empty")
+	}
+	max := nums[0]
+
+	for _, num := range nums {
+		if num > max {
+			max = num
+		}
+	}
+	return max, nil
+}
+
+func replaceEvenOnEvenIndices(nums [][]int) [][]int {
+	var newNums [][]int
+	for _, inner := range nums {
+		newInner := make([]int, 0, len(inner))
+		for j, num := range inner {
+			if j%2 == 0 && num%2 == 0 {
+				newInner = append(newInner, 0)
+			} else {
+				newInner = append(newInner, num)
+			}
+		}
+		newNums = append(newNums, newInner)
+	}
+	return newNums
+}
+
+func intersectSlices(firstArr []int, secondArr []int) ([]int, error) {
+	if firstArr == nil || secondArr == nil {
+		return nil, errors.New("slices cannot be nil")
+	}
+	firstPointer := 0
+	secondPointer := 0
+	var result []int
+
+	for firstPointer < len(firstArr) && secondPointer < len(secondArr) {
+		firstVal := firstArr[firstPointer]
+		secondVal := secondArr[secondPointer]
+		if firstVal == secondVal {
+			result = append(result, firstVal)
+			firstPointer++
+			secondPointer++
+		} else if firstVal < secondVal {
+			firstPointer++
+		} else {
+			secondPointer++
+		}
+	}
+	return result, nil
+}
+
+func PlayWithSlice(input []int) []int {
+	copied := make([]int, len(input))
+	copy(copied, input)
+
+	flag := true
+	sum := 0
+	odd := 0
+	even := 0
+
+	for i := len(input) - 1; i >= 0; i-- {
+		if flag && input[i] > 10 {
+			copied = append(copied[:i+1], append([]int{100}, copied[i+1:]...)...)
+			flag = false
+			sum += 100
+		}
+		sum = sum + input[i]
+		if input[i]%2 == 0 {
+			even++
+		} else {
+			odd++
+		}
+	}
+
+	if sum > 100 {
+		copied = append(copied, 500)
+	}
+	if even > odd {
+		copied = append([]int{1000}, copied...)
+	}
+	return copied
+}
+
+func DeletingFromSlice(input []int) []int {
+	if len(input) == 0 {
+		return input
+	}
+
+	flag1 := false
+	flag2 := false
+
+	if input[len(input)-1] > 10 {
+		input = input[:len(input)-1]
+		flag1 = true
+	}
+
+	if cap(input) > 5 && len(input) > 1 {
+		input = append(input[:2], input[3:]...)
+		flag2 = true
+	}
+
+	if flag1 && flag2 && len(input) > 0 {
+		input = input[1:]
+	}
+
+	input = slices.Clip(input)
+
+	return input
 }
