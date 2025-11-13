@@ -452,19 +452,30 @@ func main() {
 	// fmt.Println(DeletingFromSlice([]int{}))
 	////----------------------------------------------------
 
-	input := [][]int{
-		{3, 1, 4, 1},
-		{2, 2, 2},
-		{5, 0, 6, 3, -8, 1},
-		{4, 6, 8, 2},
-	}
+	// input := [][]int{
+	// 	{3, 1, 4, 1},
+	// 	{2, 2, 2},
+	// 	{5, 0, 6, 3, -8, 1},
+	// 	{4, 6, 8, 2},
+	// }
 
-	magicSort(input)
-	for _, inner := range input {
-		fmt.Println(inner)
-	}
+	// magicSort(input)
+	// for _, inner := range input {
+	// 	fmt.Println(inner)
+	// }
 	////----------------------------------------------------
-
+	// fmt.Println(CountMaxFrequency([]int{1, 3, 2, 3, 4, 3, 2, 1}))
+	// fmt.Println(CountMaxFrequency([]int{}))
+	// fmt.Println(CountMaxFrequency([]int{-1, -2, -1, -3, -1, -2}))
+	////----------------------------------------------------
+	inverted := invertMap(map[string]int{
+		"banana":     2,
+		"apple":      1,
+		"grapefruit": 3,
+		"cherry":     1,
+	})
+	fmt.Println(inverted)
+	printMap(inverted)
 }
 
 // func UserProfileToString(name string, age int) (string, error) {
@@ -889,4 +900,59 @@ func magicSort(arr [][]int) {
 		}
 		return 0
 	})
+}
+
+func CountMaxFrequency(slice []int) int {
+	if len(slice) == 0 {
+		return 0
+	}
+	counterMap := map[int]int{}
+
+	for _, v := range slice {
+		counterMap[v] = counterMap[v] + 1
+	}
+
+	maxVal := counterMap[slice[0]]
+
+	for _, v := range counterMap {
+		if v > maxVal {
+			maxVal = v
+		}
+	}
+
+	return maxVal
+}
+
+func invertMap(input map[string]int) map[int][]string {
+	invert := map[int][]string{}
+
+	for k, v := range input {
+		invert[v] = append(invert[v], k)
+	}
+
+	return invert
+}
+
+func printMap(input map[int][]string) {
+	list := []int{}
+	for k := range input {
+		list = append(list, k)
+	}
+	slices.Sort(list)
+	var sb strings.Builder
+	sb.WriteString("{\n")
+	for _, v := range list {
+		lineArr := input[v]
+		slices.Sort(lineArr)
+		sb.WriteString(fmt.Sprintf("  %d: [", v))
+		for i, v := range lineArr {
+			sb.WriteString(fmt.Sprintf("\"%s\"", v))
+			if i < len(lineArr)-1 {
+				sb.WriteString(", ")
+			}
+		}
+		sb.WriteString("],\n")
+	}
+	sb.WriteString("}")
+	fmt.Println(sb.String())
 }
